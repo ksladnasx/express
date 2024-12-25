@@ -1,0 +1,90 @@
+{
+    "data": [
+        {
+            "id":1,
+            "name": "John",
+            "age": 30,
+            "email": "johndoe@example.com",
+            "phone": "+1 123-456-7890"
+        },
+        {
+            "id": 2,
+            "name": "Jane",
+            "age": 28,
+            "email": "janedoe@example.com",
+            "phone": "+1 987-654-3210"
+        },
+        {
+            "id": 3,
+            "name": "Bob",
+            "age": 35,
+            "email": "bobsmith@example.com",
+            "phone": "+1 555-555-5555"
+        },
+        {
+            "id": 4,
+            "name": "Alice",
+            "age": 25,
+            "email": "alicejones@example.com",
+            "phone": "+1 888-888-8888"
+        },
+        {
+            "id": 5,
+            "name": "Mike",
+            "age": 32,
+            "email": "mikejohnson@example.com",
+            "phone": "+1 222-222-2222"
+        },
+        {
+            "id": 6,
+            "name": "Emily",
+            "age": 27,
+            "email": "emilydavis@example.com",
+            "phone": "+1 333-333-3333"
+        },
+        {
+            "id": 7,
+            "name": "Sarah",
+            "age": 38,
+            "email": "sarahwilson@example.com",
+            "phone": "+1 444-444-4444"
+        },
+        {
+            "id": 8,
+            "name": "David",
+            "age": 29,
+            "email": "davidthompson@example.com",
+            "phone": "+1 555-555-5555"
+        },
+        {
+            "id": 9,
+            "name": "Sophia",
+            "age": 33,
+            "email": "sophiemiller@example.com",
+            "phone": "+1 666-666-6666"
+        },
+        {
+            "id": 10,
+            "name": "Michael",
+            "age": 36,
+            "email": "michaellee@example.com",
+            "phone": "+1 777-777-7777"
+        },
+        {
+            "id": 11,
+            "name": "Emma",
+            "age": 24,
+            "email": "emmawatson@example.com",
+            "phone": "+1 888-888-8888"
+        },
+        {
+            "id": 12,
+            "name": "Daniel",
+            "age": 34,
+            "email": "danielrogers@example.com",
+            "phone": "+1 999-999-9999"
+        }
+    ]
+   
+}
+

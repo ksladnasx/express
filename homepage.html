@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        a{
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Hello, World!</h1>
+    <p>Input the worker's id if you want to find he or she.</p>
+    <h6 style="color: crimson;">Please enter a valid number between 1 and 12!</h6>
+    <input type="text" name="" id='myInput'>
+    <button onclick="getid()"><a href=" " id= "myHref">Click me!</a></button>
+    <button><a href="" onclick="getid()" id="download">Downloda File</a></button>
+    
+    <script>
+        function getid() {
+
+            let id = document.getElementById('myInput').value;
+            if ( id != Number(id)) {
+                alert("Please enter a valid number!");
+                return;
+            }
+            // alert('Your input is:'+ id);
+            let a = document.getElementById("myHref");
+            let b = document.getElementById("download");
+            a.href = "./worker/" + id +".html"; // Update the href attribute
+            b.href = "./download/" + id +".html"; // Update the href attribute
+            
+        }
+        
+    </script>
+</body>
+</html>

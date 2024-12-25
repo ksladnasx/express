@@ -1,0 +1,15 @@
+{
+  "name": "express-learn",
+  "version": "1.0.0",
+  "description": "",
+  "main": "01-体验.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server": "nodemon /01-体验.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
