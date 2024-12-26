@@ -12,6 +12,8 @@ const bodyParser = require('body-parser')
 app.use(bodyParser.urlencoded({extends: false}));
 app.use(bodyParser.json())
 
+
+//主页面
 app.get('/', (req, res) => {
     
    if(flag==false){
@@ -30,14 +32,15 @@ app.get('/', (req, res) => {
     
     
 })
-// console.log(data)
+
+// 员工界面展示
 app.get('/worker/:id.html', (req, res) => { 
     // 获取id参数
     let { id } = req.params;
     // console.log(id)
     // 将对应id的数据存到worker里面
     let worker = data.find(item => {
-        console.log(item)
+        // console.log(item)
         if (item.id === Number(id)) {
             return true;
         }
@@ -73,9 +76,19 @@ app.get('/worker/:id.html', (req, res) => {
     }
 
 })
+
+
+//下载请求实现
 app.get('/download/:id.html', (req, res) => {
     // 获取id参数
     let { id } = req.params;
+    if (id > 12) {
+        res.status(404).json({
+            state: 404,
+            message: 'Worker not found'
+        });
+        return;
+    }
     // console.log(id)
     // 将对应id的数据存到worker里面
     let download = data.find(item => {
@@ -132,6 +145,8 @@ app.get('/content', function (req, res) {
 })
 
 
+
+//登录实现
 //假设的账号密码
 loginname = "wanghan"
 loginpassword = "123456"
@@ -155,7 +170,9 @@ app.post('/login', function (req, res) {
         // res.sendFile(__dirname+'/homepage.html');
         // req.redirect('/')
     } else {
-        res.send('Login failed');
+        res.send(`<h1>Login failed!</h1>
+            <button><a href="http://192.168.1.105:3000/content">Click to back</a></button>
+            `);
         
     }
     
