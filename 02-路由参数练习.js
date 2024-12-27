@@ -2,24 +2,41 @@
 const express = require('express');
 //创建应用对象
 const app = express();
-fs = require('fs');
+const fs = require('fs');
+const path = require('path'); //用于绝对路径生成
 //导入json数据（解构赋值直接定位到worker）
 const { data } = require('./testdata.json');
+
 //判断登录成功的标志
 flag = false
-//使用body-parser之间件
-const bodyParser = require('body-parser')
+//使用body-parser之间件,用于获取后续用户post的username, password
+const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({extends: false}));
 app.use(bodyParser.json())
+
+//定义中间件函数，用于记录访问的函数和ip
+function recordMiddleware(req,res,next){
+    //获取url和ip
+    let {url,ip} = req;
+    //将信息保存到文件
+    fs.appendFileSync(path.resolve(__dirname+'/access.log'), `${ip},   http://192.168.1.105:3000${url} \r\n`, 'utf8', (err) => {
+        if (err) {
+            console.error(err);
+        }
+    });
+    //调用next继续后面的响应请求
+    next();
+}
+//调用这个函数
+app.use(recordMiddleware);
 
 
 //主页面
 app.get('/', (req, res) => {
-    
    if(flag==false){
     res.redirect('/content')
    }else{
-    flag = false;
+    // flag = false;
     fs.readFile(__dirname + '/homepage.html', 'utf8', (err,data) => {
         if (err) {
             console.error(err);
@@ -27,10 +44,7 @@ app.get('/', (req, res) => {
         }
         res.end(data);
     });
-}
-    
-    
-    
+} 
 })
 
 // 员工界面展示
@@ -63,6 +77,7 @@ app.get('/worker/:id.html', (req, res) => {
            <p>age: ${worker.age}</p> 
            <p>email: ${worker.email}</p> 
            <p>phone: ${worker.phone}</p> 
+            <button><a href="http://192.168.1.105:3000/"><<--back to homepage</a></button>
 </body>
 </html>`)
 
@@ -82,13 +97,13 @@ app.get('/worker/:id.html', (req, res) => {
 app.get('/download/:id.html', (req, res) => {
     // 获取id参数
     let { id } = req.params;
-    if (id > 12) {
-        res.status(404).json({
-            state: 404,
-            message: 'Worker not found'
-        });
-        return;
-    }
+    // if (id > 12) {
+    //     res.status(404).json({
+    //         state: 404,
+    //         message: 'Worker not found'
+    //     });
+    //     return;
+    // }
     // console.log(id)
     // 将对应id的数据存到worker里面
     let download = data.find(item => {
@@ -98,10 +113,10 @@ app.get('/download/:id.html', (req, res) => {
         }
     });
     const jsonData = JSON.stringify(download)
-    fs.writeFileSync(`worker${id}Info.json`, jsonData)
+    fs.writeFileSync(`./workerData/worker${id}Info.json`, jsonData)
     // 如果download存在，服务器写入文件并返回下载
     if (download) {
-        res.download(`worker${id}Info.json`) // 下载
+        res.download(`./workerData/worker${id}Info.json`) // 下载
         // res.json(worker);   
     } else {
         // 如果worker不存在，返回404
@@ -152,7 +167,7 @@ loginname = "wanghan"
 loginpassword = "123456"
 // 接收post请求并判断是否账号密码正确
 app.post('/login', function (req, res) {
-    console.log(req.body);
+    // console.log(req.body);   
     let { username, password } = req.body;
     username = req.body.username
     password = req.body.password;
@@ -178,6 +193,7 @@ app.post('/login', function (req, res) {
     
     // res.send('POST request body received');     
 })
+
 // 重定向
 app.get('/other', function (req, res) {
     res.redirect('http://www.baidu.com')

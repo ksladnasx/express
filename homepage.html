@@ -22,7 +22,7 @@
         function getid() {
 
             let id = document.getElementById('myInput').value;
-            if ( id != Number(id)) {
+            if ( id != Number(id) || id < 0|| id > 12   ) {
                 alert("Please enter a valid number!");
                 return;
             }
