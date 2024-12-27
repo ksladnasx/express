@@ -14,12 +14,14 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({extends: false}));
 app.use(bodyParser.json())
 
-//定义中间件函数，用于记录访问的函数和ip
+//定义中间件函数，用于记录访问的url和ip以及请求时间
 function recordMiddleware(req,res,next){
     //获取url和ip
     let {url,ip} = req;
+    //获取当前时间
+    let time = new Date().toLocaleString();
     //将信息保存到文件
-    fs.appendFileSync(path.resolve(__dirname+'/access.log'), `${ip},   http://192.168.1.105:3000${url} \r\n`, 'utf8', (err) => {
+    fs.appendFileSync(path.resolve(__dirname+'/access.log'),   `${ip}      ${req.method}        ${time}     http://192.168.1.105:3000${url}\r\n`, 'utf8', (err) => {
         if (err) {
             console.error(err);
         }
