@@ -31,6 +31,29 @@ function recordMiddleware(req,res,next){
 app.use(recordMiddleware);
 
 
+//这个中间件用于根据用户传参判断是否跳转对应页面
+// 函数在你需要的请求响应后面添加函数名调用
+let checkCodeMassage = (req, res, next) => {
+    if (req.query.code == '521'){
+        next();
+    }
+    else {
+        res.status(403).send('<h1>Forbidden</h1>');
+    }
+}
+
+
+//后台界面
+app.get('/admin', checkCodeMassage, (req, res) => {// 函数在你需要的请求响应后面添加函数名调用
+    fs.readFile(__dirname + '/backstage.html', 'utf8', (err, data) => {
+        if (err) {
+            console.error(err);
+            return;
+        }
+        res.end(data);
+    });
+})
+
 //主页面
 app.get('/', (req, res) => {
    if(flag==false){
@@ -46,7 +69,6 @@ app.get('/', (req, res) => {
     });
 } 
 })
-
 // 员工界面展示
 app.get('/worker/:id.html', (req, res) => { 
     // 获取id参数
@@ -68,6 +90,14 @@ app.get('/worker/:id.html', (req, res) => {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+    *{
+            font-family: 'Times New Roman', Times, serif;
+        }
+        a{
+            text-decoration: none;
+        }
+    </style>
 </head>
 <body>
     <h1>Hello, Worker!</h1>
@@ -185,8 +215,52 @@ app.post('/login', function (req, res) {
         // res.sendFile(__dirname+'/homepage.html');
         // req.redirect('/')
     } else {
-        res.send(`<h1>Login failed!</h1>
-            <button><a href="http://192.168.1.105:3000/content">Click to back</a></button>
+        res.send(`
+            <style type="text/css">
+             *{
+            font-family: 'Times New Roman', Times, serif;
+        }
+        a{
+            text-decoration: none;
+        }
+        p{
+            color: red;
+        }
+        h1{
+            font-size: 24px;
+        }
+        button{
+            margin-top: 20px;
+        }
+        body{
+            background-color:rgb(12, 181, 248);
+        }
+        h1, p, button{
+            margin: 0;
+            padding: 20px;
+        }
+        button{
+            margin: 10px;
+            padding: 10px;
+            border: none;
+            border-radius: 10px;
+            background-color:rgb(142, 169, 226);
+            color: white;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+        }
+        button:hover{
+            background-color:rgb(202, 235, 120);
+        }
+        a:hover{
+            color: rgb(25, 151, 190);
+        }
+        h1, p{
+            text-align: center;
+        }</style>
+           <p><h1>Login failed!</h1></p> 
+            <p><button><a href="http://192.168.1.105:3000/content">Click to back</a></button></p>
             `);
         
     }
@@ -204,8 +278,9 @@ app.use((req, res) => {
     res.status(404).send('Not Found');
     // res.end('404: Not Found');  // 也可以返回一个404页面
 })
-// 监听端口
 
+
+// 监听端口
 app.listen(3000, () => {
     console.log('Server is running at http://localhost:3000');
 })

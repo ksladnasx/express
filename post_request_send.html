@@ -3,20 +3,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Login</title>
+    <style>
+        *{
+            font-family: 'Times New Roman', Times, serif;
+        }
+        a{
+            text-decoration: none;
+        }
+        #fwht{
+            margin-top: 10px;
+            font-size: 6px;
+            
+            width: 50px;
+            height: 15px;
+        }
+        #fwht:hover{
+            background-color: lightgray;
+        }
+        #fwht:active{
+            background-color: gray;
+        }
+        .mydiv{
+            margin-top: 10px;
+            width: 400px;
+            text-align: center;
+            border-radius: 10px;
+            border: 1px solid black;
+            padding: 10px;
+            margin-bottom: 20px;
+            display: inline-block;
+            transition: background-color 0.5s ease;
+            cursor: pointer;
+            box-shadow: 2px 2px 5px rgba(185, 112, 112, 0.3);
+            background-color: rgb(190, 255, 189);
+            color: black;
+
+        }
+        #suggest{
+            width: 10%;
+            height: 10px;
+            padding: 5px;
+            padding-top: 0.12%;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            background-color: #f1f1f1;
+            color: black;
+            transition: background-color 0.5s ease;
+            cursor: pointer;
+            box-shadow: 1px 1px 5px rgba(185, 112, 112, 0.3);
+        }
+        #username, #password{
+            width: 20%;
+            height: 10px;
+            padding: 5px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            background-color: #f1f1f1;
+            color: black;
+            transition: background-color 0.5s ease;
+            cursor: pointer;
+            box-shadow: 2px 2px 5px rgba(185, 112, 112, 0.3);
+        }
+        #suggest:hover, #username:hover, #password:hover{
+            background-color: lightgray;
+        }
+        button{
+            width: 10%;
+            height: 10px;
+            padding: 5px;
+            border: none;
+            border-radius: 2px;
+            font-size: 16px;
+            background-color: #adf1b8;
+            color: black;
+            transition: background-color 0.5s ease;
+            cursor: pointer;
+            box-shadow: 2px 2px 5px rgba(185, 112, 112, 0.3);
+            margin-top: 10px;
+        }
+        #submit{
+            width: 15%;
+            width: 10%;
+            height: 10%;
+            padding: 3px;
+            border: none;
+            border-radius: 2px;
+            font-size: 16px;
+            background-color: #adf1b8;
+            color: black;
+            transition: background-color 0.5s ease;
+            cursor: pointer;
+            box-shadow: 2px 2px 5px rgba(185, 112, 112, 0.3);
+            margin-top: 10px;
+            
+        }
+        #submit:hover{
+            background-color: #add1b8;
+        }
+       div{
+        margin: auto;
+        
+       }
+    </style>
 </head>
 <body>
    <center>
-    <h1>Welcome to the Loginpage</h1>
+    <div class="mydiv"><h1>Welcome to the Loginpage</h1></div>
     <p>Please enter your username and password to access the protected area.</p>
     
     <form action="http://192.168.1.105:3000/login" method="post">
-       <label for="username">账号</label><input type="text" name="username" id="username">
+       <label for="username">账号:    </label><input type="text" name="username" id="username">
        <p></p>
-       <label for="password">密码</label><input type="password" name="password" id="password">
-       <p></p>
-        <input type="submit" value="登录">
+       <label for="password">密码:    </label><input type="password" name="password" id="password">
+       <div><input type="submit" value="登录" style="width: 15%;" id ='submit'></div>
+        
+    
+        <input type="text" name="" id="suggest">
+        <button id="fwht" onclick="changeUrl()"><a href="http://192.168.1.105:3000/admin" id = 'req'>访问后台</a></button>
     </form>
 </center> 
+<script>
+    let anhao = document.getElementById('suggest')
+    let input = document.getElementById('req')
+    function changeUrl(){
+        input.href = "http://192.168.1.105:3000/admin?code="+anhao.value
+    }
+</script>
 </body>
 </html>                             
