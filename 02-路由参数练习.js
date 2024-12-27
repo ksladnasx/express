@@ -273,6 +273,13 @@ app.get('/other', function (req, res) {
     res.redirect('http://www.baidu.com')
 })
 
+//退出登录
+
+app.get('/logout', function (req, res) {
+    flag = false;
+    res.redirect("/content")
+})
+
 // 匹配所有不在上面的请求
 app.use((req, res) => {
     res.status(404).send('Not Found');
@@ -280,7 +287,9 @@ app.use((req, res) => {
 })
 
 
+
+
 // 监听端口
 app.listen(3000, () => {
-    console.log('Server is running at http://localhost:3000');
+    console.log('Server is running at http://192.168.1.105:3000/');
 })
