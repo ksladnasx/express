@@ -7,21 +7,25 @@ const path = require('path'); //用于绝对路径生成
 //导入json数据（解构赋值直接定位到worker）
 const { data } = require('./testdata.json');
 
+let ipconfig = require('./config/ipconfig.json')
+let ip = ipconfig.ip
+// console.log(ip )
+
 //判断登录成功的标志
-flag = false
+let flag = false
 //使用body-parser之间件,用于获取后续用户post的username, password
 const bodyParser = require('body-parser');
-app.use(bodyParser.urlencoded({extends: false}));
+app.use(bodyParser.urlencoded({ extends: false }));
 app.use(bodyParser.json())
 
 //定义中间件函数，用于记录访问的url和ip以及请求时间
-function recordMiddleware(req,res,next){
+function recordMiddleware(req, res, next) {
     //获取url和ip
-    let {url,ip} = req;
+    let { url, ip } = req;
     //获取当前时间
     let time = new Date().toLocaleString();
     //将信息保存到文件
-    fs.appendFileSync(path.resolve(__dirname+'/access.log'),   `${ip}      ${req.method}        ${time}     http://192.168.1.105:3000${url}\r\n`, 'utf8', (err) => {
+    fs.appendFileSync(path.resolve(__dirname + '/access.log'), `${ip}      ${req.method}        ${time}     ${ip}:3000${url}\r\n`, 'utf8', (err) => {
         if (err) {
             console.error(err);
         }
@@ -32,11 +36,13 @@ function recordMiddleware(req,res,next){
 //调用这个函数
 app.use(recordMiddleware);
 
+//利用中间件创建全局的静态资源目录,直接网址就可以访问这个文件夹
+//  app.use(express.static(__dirname+'./public'));
 
 //这个中间件用于根据用户传参判断是否跳转对应页面
 // 函数在你需要的请求响应后面添加函数名调用
 let checkCodeMassage = (req, res, next) => {
-    if (req.query.code == '521'){
+    if (req.query.code == '521') {
         next();
     }
     else {
@@ -47,6 +53,7 @@ let checkCodeMassage = (req, res, next) => {
 
 //后台界面
 app.get('/admin', checkCodeMassage, (req, res) => {// 函数在你需要的请求响应后面添加函数名调用
+    flag = true;
     fs.readFile(__dirname + '/backstage.html', 'utf8', (err, data) => {
         if (err) {
             console.error(err);
@@ -58,21 +65,21 @@ app.get('/admin', checkCodeMassage, (req, res) => {// 函数在你需要的请�
 
 //主页面
 app.get('/', (req, res) => {
-   if(flag==false){
-    res.redirect('/content')
-   }else{
-    // flag = false;
-    fs.readFile(__dirname + '/homepage.html', 'utf8', (err,data) => {
-        if (err) {
-            console.error(err);
-            return;
-        }
-        res.end(data);
-    });
-} 
+    if (flag == false) {
+        res.redirect('/content')
+    } else {
+        // flag = false;
+        fs.readFile(__dirname + '/homepage.html', 'utf8', (err, data) => {
+            if (err) {
+                console.error(err);
+                return;
+            }
+            res.end(data);
+        });
+    }
 })
 // 员工界面展示
-app.get('/worker/:id.html', (req, res) => { 
+app.get('/worker/:id.html', (req, res) => {
     // 获取id参数
     let { id } = req.params;
     // console.log(id)
@@ -109,7 +116,7 @@ app.get('/worker/:id.html', (req, res) => {
            <p>age: ${worker.age}</p> 
            <p>email: ${worker.email}</p> 
            <p>phone: ${worker.phone}</p> 
-            <button><a href="http://192.168.1.105:3000/"><<--back to homepage</a></button>
+            <button><a href="${ip}:3000/"><<--back to homepage</a></button>
 </body>
 </html>`)
 
@@ -129,14 +136,6 @@ app.get('/worker/:id.html', (req, res) => {
 app.get('/download/:id.html', (req, res) => {
     // 获取id参数
     let { id } = req.params;
-    // if (id > 12) {
-    //     res.status(404).json({
-    //         state: 404,
-    //         message: 'Worker not found'
-    //     });
-    //     return;
-    // }
-    // console.log(id)
     // 将对应id的数据存到worker里面
     let download = data.find(item => {
         // consle.log(item)
@@ -157,6 +156,7 @@ app.get('/download/:id.html', (req, res) => {
             message: 'Worker not found'
         });
     }
+
 })
 
 //响应文件内容
@@ -185,7 +185,7 @@ app.get('/content', function (req, res) {
                     break;
             }
         } else {
-            res.setHeader('Content-Type',  'text/html');
+            res.setHeader('Content-Type', 'text/html');
             res.end(data, 'utf-8');
         }
     })
@@ -207,15 +207,13 @@ app.post('/login', function (req, res) {
     // console.log(req.body)
     if (username === loginname && password === loginpassword) {
         flag = true;
-        fs.readFile(__dirname + '/watch.html',(err, data) => {
+        fs.readFile(__dirname + '/watch.html', (err, data) => {
             if (err) {
                 console.error(err);
                 return;
             }
             res.end(data);
         })
-        // res.sendFile(__dirname+'/homepage.html');
-        // req.redirect('/')
     } else {
         res.send(`
             <style type="text/css">
@@ -262,12 +260,17 @@ app.post('/login', function (req, res) {
             text-align: center;
         }</style>
            <p><h1>Login failed!</h1></p> 
-            <p><button><a href="http://192.168.1.105:3000/content">Click to back</a></button></p>
+            <p><button><a href="${ip}:3000/content">Click to back</a></button></p>
             `);
-        
+
     }
-    
+
     // res.send('POST request body received');     
+})
+//退出登录
+app.get('/logout', function (req, res) {
+    flag = false;
+    res.redirect("/content")
 })
 
 // 重定向
@@ -275,12 +278,8 @@ app.get('/other', function (req, res) {
     res.redirect('http://www.baidu.com')
 })
 
-//退出登录
 
-app.get('/logout', function (req, res) {
-    flag = false;
-    res.redirect("/content")
-})
+
 
 // 匹配所有不在上面的请求
 app.use((req, res) => {
@@ -293,5 +292,5 @@ app.use((req, res) => {
 
 // 监听端口
 app.listen(3000, () => {
-    console.log('Server is running at http://192.168.1.105:3000/');
+    console.log(`Server is running at ${ip}:3000/`);
 })

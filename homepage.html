@@ -1,24 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>homepage</title>
     <style>
-        *{
+        * {
             font-family: 'Times New Roman', Times, serif;
         }
-        a{
+
+        a {
             text-decoration: none;
         }
-       .mydiv{
-        margin: 20px;
-        padding: 20px;
-        border: 1px solid black;
-        border-radius: 10px;
-        text-align: center;
+
+        .mydiv {
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid black;
+            border-radius: 10px;
+            text-align: center;
         }
-        button{
+
+        button {
             margin: 10px;
             padding: 10px;
             border: none;
@@ -29,44 +33,57 @@
             display: inline-block;
             font-size: 16px;
         }
+
         button:hover {
             background-color: #45a049;
         }
-        h6{
+
+        h6 {
             color: crimson;
             font-size: 12px;
         }
-       
-       
     </style>
 </head>
+
 <body>
     <div class="mydiv">
         <h1>Hello, Visiter!</h1>
-    <p>Input the worker's id if you want to find he or she.</p>
-    <h6 style="color: crimson;">Please enter a valid number between 1 and 12!</h6>
-    <div class="mydiv"><input type="text" name="" id='myInput'>
-        <button onclick="getid()"><a href=" " id= "myHref">See worker's Info</a></button>
-        <button><a href="" onclick="getid()" id="download">Downloda File</a></button></div>
+        <p>Input the worker's id if you want to find he or she.</p>
+        <h6 style="color: crimson;">Please enter a valid number between 1 and 12!</h6>
+        <div class="mydiv"><input type="text" name="" id='myInput'>
+            <!-- 函数调用改href与本身点击事件发生时候的href会产生冲突，尽量用window.location.href =新页面来实现跳转 -->
+            <button onclick="getid1()"><a href=" " id="myHref">See worker's Info</a></button>
+            <button><a onclick="getid2()" id="download">Downloda File</a></button>
+            <button><a href="">Get Picture</a></button>
+        </div>
     </div>
-    <button><a href="http://192.168.1.105:3000/logout">退出登录</a></button>
-    
-    <script>
-        function getid() {
+    <button><a href="http://192.168.1.200:3000/logout">退出登录</a></button>
 
+    <script>
+        function getid1() {
+            let a = document.getElementById("myHref");
             let id = document.getElementById('myInput').value;
-            if ( id != Number(id) || id < 0|| id > 12   ) {
+            //isNaN(id)判断是否为数字
+            if (isNaN(id) || Number.parseInt(id) > 12 || Number.parseInt(id) <0) {
                 alert("Please enter a valid number!");
                 return;
             }
-            // alert('Your input is:'+ id);
-            let a = document.getElementById("myHref");
-            let b = document.getElementById("download");
-            a.href = "./worker/" + id +".html"; // Update the href attribute
-            b.href = "./download/" + id +".html"; // Update the href attribute
-            
+            window.location.href = "./worker/" + id + ".html"; // Update the href attribute
+
         }
-        
+
+        function getid2() {
+            let b = document.getElementById("download");
+            let id = document.getElementById('myInput').value;
+            // console.log(id);
+            if (isNaN(id)) {
+                alert("Please enter a valid number!");
+                return;
+            }
+            window.location.href = "./download/" + id + ".html"; // Update the href attribute
+
+        }
     </script>
 </body>
+
 </html>

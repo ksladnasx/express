@@ -114,7 +114,7 @@
     <div class="mydiv"><h1>Welcome to the Loginpage</h1></div>
     <p>Please enter your username and password to access the protected area.</p>
     
-    <form action="http://192.168.1.105:3000/login" method="post">
+    <form action="http://192.168.1.200:3000/login" method="post">
        <label for="username">账号:    </label><input type="text" name="username" id="username">
        <p></p>
        <label for="password">密码:    </label><input type="password" name="password" id="password">
@@ -122,14 +122,14 @@
         
     
         <input type="text" name="" id="suggest">
-        <button id="fwht" onclick="changeUrl()"><a href="http://192.168.1.105:3000/admin" id = 'req'>访问后台</a></button>
+        <button id="fwht" onclick="changeUrl()"><a href="http://192.168.1.200:3000/admin" id = 'req'>访问后台</a></button>
     </form>
 </center> 
 <script>
     let anhao = document.getElementById('suggest')
     let input = document.getElementById('req')
     function changeUrl(){
-        input.href = "http://192.168.1.105:3000/admin?code="+anhao.value
+        input.href = "http://192.168.1.200:3000/admin?code="+anhao.value
     }
 </script>
 </body>
