@@ -52,12 +52,16 @@
         <h6 style="color: crimson;">Please enter a valid number between 1 and 12!</h6>
         <div class="mydiv"><input type="text" name="" id='myInput'>
             <!-- 函数调用改href与本身点击事件发生时候的href会产生冲突，尽量用window.location.href =新页面来实现跳转 -->
-            <button onclick="getid1()"><a href=" " id="myHref">See worker's Info</a></button>
+            <button onclick="getid1()"><a  id="myHref">See worker's Info</a></button>
             <button><a onclick="getid2()" id="download">Downloda File</a></button>
-            <button><a href="">Get Picture</a></button>
+            <button><a onclick="getid3()" id="myPicture">See Picture</a></button>
+            <button><a onclick="getid4()" id="Pdownload">Downloda picture</a></button>
         </div>
     </div>
-    <button><a href="http://192.168.1.200:3000/logout">退出登录</a></button>
+    <button><a href="http://192.168.1.103:3000/logout">退出登录</a></button>
+    
+    
+    <a href="http://192.168.1.103:3000/p">？？？</a>
 
     <script>
         function getid1() {
@@ -68,6 +72,7 @@
                 alert("Please enter a valid number!");
                 return;
             }
+            // 函数调用改href与本身点击事件发生时候的href会产生冲突，尽量用window.location.href =新页面来实现跳转
             window.location.href = "./worker/" + id + ".html"; // Update the href attribute
 
         }
@@ -81,6 +86,31 @@
                 return;
             }
             window.location.href = "./download/" + id + ".html"; // Update the href attribute
+
+        }
+
+        function getid3() {
+            let c = document.getElementById("myPicture");
+            let id = document.getElementById('myInput').value;
+            //isNaN(id)判断是否为数字
+            if (isNaN(id) || Number.parseInt(id) > 12 || Number.parseInt(id) <0) {
+                alert("Please enter a valid number!");
+                return;
+            }
+            // 函数调用改href与本身点击事件发生时候的href会产生冲突，尽量用window.location.href =新页面来实现跳转
+            window.location.href = "./img/" + id + "picture.jpg"; // Update the href attribute
+
+        }
+        function getid4() {
+            let d = document.getElementById("myPicture");
+            let id = document.getElementById('myInput').value;
+            //isNaN(id)判断是否为数字
+            if (isNaN(id) || Number.parseInt(id) > 12 || Number.parseInt(id) <0) {
+                alert("Please enter a valid number!");
+                return;
+            }
+            // 函数调用改href与本身点击事件发生时候的href会产生冲突，尽量用window.location.href =新页面来实现跳转
+            window.location.href = "./img/" + id + ".html"; // Update the href attribute
 
         }
     </script>

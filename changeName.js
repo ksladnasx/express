@@ -3,7 +3,7 @@ const path = require('path');
 
 // 指定文件夹路径
 const folderPath = './public/img';
-
+ let i = 0
 fs.readdir(folderPath, (err, files) => {
     if (err) {
         console.error('Error reading directory:', err);
@@ -11,7 +11,7 @@ fs.readdir(folderPath, (err, files) => {
     }
 
     const prefix = 'new_';
-    let i = 0
+   
     files.forEach((file) => {
         const oldFilePath = path.join(folderPath, file);
         // 获取文件扩展名

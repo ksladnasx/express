@@ -15,8 +15,11 @@ let ip = ipconfig.ip
 let flag = false
 //使用body-parser之间件,用于获取后续用户post的username, password
 const bodyParser = require('body-parser');
-app.use(bodyParser.urlencoded({ extends: false }));
-app.use(bodyParser.json())
+const { error } = require('console');
+//设置为解析querystring格式的路由中间件
+const urlencodedParser = bodyParser.urlencoded({ extends: false });
+//这个是解析json的请求体的中间件
+// app.use(bodyParser.json())
 
 //定义中间件函数，用于记录访问的url和ip以及请求时间
 function recordMiddleware(req, res, next) {
@@ -32,12 +35,12 @@ function recordMiddleware(req, res, next) {
     });
     //调用next继续后面的响应请求
     next();
-}
+}   
 //调用这个函数
 app.use(recordMiddleware);
 
 //利用中间件创建全局的静态资源目录,直接网址就可以访问这个文件夹
-//  app.use(express.static(__dirname+'./public'));
+app.use(express.static(__dirname+'/public'));
 
 //这个中间件用于根据用户传参判断是否跳转对应页面
 // 函数在你需要的请求响应后面添加函数名调用
@@ -116,7 +119,7 @@ app.get('/worker/:id.html', (req, res) => {
            <p>age: ${worker.age}</p> 
            <p>email: ${worker.email}</p> 
            <p>phone: ${worker.phone}</p> 
-            <button><a href="${ip}:3000/"><<--back to homepage</a></button>
+            <button><a href="${ip}"><<--back to homepage</a></button>
 </body>
 </html>`)
 
@@ -158,7 +161,12 @@ app.get('/download/:id.html', (req, res) => {
     }
 
 })
-
+//图片下载实现
+app.get('/img/:id.html', (req, res) => {
+let {id} = req.params
+    pathes = `./public/img/${id}picture.jpg`
+    res.download(pathes)    
+})
 //响应文件内容
 app.get('/content', function (req, res) {
     fs.readFile(__dirname + '/post_request_send.html', (error, data) => {
@@ -198,8 +206,9 @@ app.get('/content', function (req, res) {
 loginname = "wanghan"
 loginpassword = "123456"
 // 接收post请求并判断是否账号密码正确
-app.post('/login', function (req, res) {
-    // console.log(req.body);   
+//路由中间件执行之后会在req上添加一个属性body
+app.post('/login',urlencodedParser, function (req, res) {
+    //解构赋值得到
     let { username, password } = req.body;
     username = req.body.username
     password = req.body.password;
@@ -260,7 +269,7 @@ app.post('/login', function (req, res) {
             text-align: center;
         }</style>
            <p><h1>Login failed!</h1></p> 
-            <p><button><a href="${ip}:3000/content">Click to back</a></button></p>
+            <p><button><a href="${ip}content">Click to back</a></button></p>
             `);
 
     }
@@ -273,6 +282,26 @@ app.get('/logout', function (req, res) {
     res.redirect("/content")
 })
 
+
+app.get('/p',(req, res) => {
+    fs.readFile(__dirname + '/p/p.html',(error,data) => {
+        if(error) {
+            console.error(error);
+            return;
+        }
+        res.end(data);
+    })
+})
+app.get('/p:id',(req, res) => {
+    let { id } = req.params;
+    fs.readFile(__dirname + `/p/p${id}.html`,(error,data) => {
+        if(error) {
+            console.error(error);
+            return;
+        }
+        res.end(data);
+    })
+})
 // 重定向
 app.get('/other', function (req, res) {
     res.redirect('http://www.baidu.com')
@@ -292,5 +321,5 @@ app.use((req, res) => {
 
 // 监听端口
 app.listen(3000, () => {
-    console.log(`Server is running at ${ip}:3000/`);
+    console.log(`Server is running at ${ip}`);
 })
