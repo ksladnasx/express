@@ -1,5 +1,10 @@
 //导入express
 const express = require('express');
+const Prouter = require('./p');
+// const login = require('./login');
+const download = require('./download');
+// const admin = require('./admin');
+// const background = require('./background');
 //创建应用对象
 const app = express();
 const fs = require('fs');
@@ -13,6 +18,12 @@ let ip = ipconfig.ip
 
 //判断登录成功的标志
 let flag = false
+// module.exports = {
+//     setFlag: function(newValue) {
+//         flag = newValue;
+//         // console.log(flag)
+//     }
+// }
 //使用body-parser之间件,用于获取后续用户post的username, password
 const bodyParser = require('body-parser');
 const { error } = require('console');
@@ -47,22 +58,24 @@ app.use(express.static(__dirname+'/public'));
 //http://localhost:3000/content这个访问就会被阻止
 //原来的访问就不会
     app.use((req, res, next) => {
-        //获取referer
-        let referer = req.get('referer');
-        //实例化
+
+        //获取请求的hostname
         let url = req.hostname
-        //获取hostnamw
-        // let hostname = new URL(ip)
-        console.log(url)
+        // console.log(url)
         // console.log(hostname.hostname)
+        //获取本机的ip
+        let stan = new URL(ip)
         // 如果referer来自这个ip，就放行，否则返回403
-        if (url == "192.168.1.103") {
+        if (url == stan.hostname) {
             next();
         } else {
             res.status(403).send('<h1>Forbidden</h1>');
         }
     });
 //这个中间件用于根据用户传参判断是否跳转对应页面
+
+//后台界面
+// app.use(background)  
 // 函数在你需要的请求响应后面添加函数名调用
 let checkCodeMassage = (req, res, next) => {
     if (req.query.code == '521') {
@@ -73,11 +86,10 @@ let checkCodeMassage = (req, res, next) => {
     }
 }
 
-
 //后台界面
 app.get('/admin', checkCodeMassage, (req, res) => {// 函数在你需要的请求响应后面添加函数名调用
     flag = true;
-    fs.readFile(__dirname + '/backstage.html', 'utf8', (err, data) => {
+    fs.readFile(__dirname + '/page/backstage.html', 'utf8', (err, data) => {
         if (err) {
             console.error(err);
             return;
@@ -85,14 +97,13 @@ app.get('/admin', checkCodeMassage, (req, res) => {// 函数在你需要的请�
         res.end(data);
     });
 })
-
 //主页面
 app.get('/', (req, res) => {
     if (flag == false) {
         res.redirect('/content')
     } else {
         // flag = false;
-        fs.readFile(__dirname + '/homepage.html', 'utf8', (err, data) => {
+        fs.readFile(__dirname + '/page/homepage.html', 'utf8', (err, data) => {
             if (err) {
                 console.error(err);
                 return;
@@ -155,41 +166,12 @@ app.get('/worker/:id.html', (req, res) => {
 })
 
 
-//下载请求实现
-app.get('/download/:id.html', (req, res) => {
-    // 获取id参数
-    let { id } = req.params;
-    // 将对应id的数据存到worker里面
-    let download = data.find(item => {
-        // consle.log(item)
-        if (item.id === Number(id)) {
-            return true;
-        }
-    });
-    const jsonData = JSON.stringify(download)
-    fs.writeFileSync(`./workerData/worker${id}Info.json`, jsonData)
-    // 如果download存在，服务器写入文件并返回下载
-    if (download) {
-        res.download(`./workerData/worker${id}Info.json`) // 下载
-        // res.json(worker);   
-    } else {
-        // 如果worker不存在，返回404
-        res.status(404).json({
-            state: 404,
-            message: 'Worker not found'
-        });
-    }
+// //下载请求实现
+app.use(download)
 
-})
-//图片下载实现
-app.get('/img/:id.html', (req, res) => {
-let {id} = req.params
-    pathes = `./public/img/${id}picture.jpg`
-    res.download(pathes)    
-})
 //响应文件内容
 app.get('/content', function (req, res) {
-    fs.readFile(__dirname + '/post_request_send.html', (error, data) => {
+    fs.readFile(__dirname + '/page/post_request_send.html', (error, data) => {
         if (error) {
             //判断错误类型
             res.setHeader('Content-Type', 'text/html; charset=utf-8');  // 统一返回 HTML 格式的文本，便于调试
@@ -236,7 +218,7 @@ app.post('/login',urlencodedParser, function (req, res) {
     // console.log(req.body)
     if (username === loginname && password === loginpassword) {
         flag = true;
-        fs.readFile(__dirname + '/watch.html', (err, data) => {
+        fs.readFile(__dirname + '/page/watch.html', (err, data) => {
             if (err) {
                 console.error(err);
                 return;
@@ -303,25 +285,9 @@ app.get('/logout', function (req, res) {
 })
 
 
-app.get('/p',(req, res) => {
-    fs.readFile(__dirname + '/p/p.html',(error,data) => {
-        if(error) {
-            console.error(error);
-            return;
-        }
-        res.end(data);
-    })
-})
-app.get('/p:id',(req, res) => {
-    let { id } = req.params;
-    fs.readFile(__dirname + `/p/p${id}.html`,(error,data) => {
-        if(error) {
-            console.error(error);
-            return;
-        }
-        res.end(data);
-    })
-})
+// 神秘网址
+app.use(Prouter)
+
 // 重定向
 app.get('/other', function (req, res) {
     res.redirect('http://www.baidu.com')
