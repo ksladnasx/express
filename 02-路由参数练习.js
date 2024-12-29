@@ -6,7 +6,7 @@ const fs = require('fs');
 const path = require('path'); //用于绝对路径生成
 //导入json数据（解构赋值直接定位到worker）
 const { data } = require('./testdata.json');
-
+//全局ip导入
 let ipconfig = require('./config/ipconfig.json')
 let ip = ipconfig.ip
 // console.log(ip )
@@ -16,6 +16,7 @@ let flag = false
 //使用body-parser之间件,用于获取后续用户post的username, password
 const bodyParser = require('body-parser');
 const { error } = require('console');
+
 //设置为解析querystring格式的路由中间件
 const urlencodedParser = bodyParser.urlencoded({ extends: false });
 //这个是解析json的请求体的中间件
@@ -42,6 +43,25 @@ app.use(recordMiddleware);
 //利用中间件创建全局的静态资源目录,直接网址就可以访问这个文件夹
 app.use(express.static(__dirname+'/public'));
 
+//定义防盗链
+//http://localhost:3000/content这个访问就会被阻止
+//原来的访问就不会
+    app.use((req, res, next) => {
+        //获取referer
+        let referer = req.get('referer');
+        //实例化
+        let url = req.hostname
+        //获取hostnamw
+        // let hostname = new URL(ip)
+        console.log(url)
+        // console.log(hostname.hostname)
+        // 如果referer来自这个ip，就放行，否则返回403
+        if (url == "192.168.1.103") {
+            next();
+        } else {
+            res.status(403).send('<h1>Forbidden</h1>');
+        }
+    });
 //这个中间件用于根据用户传参判断是否跳转对应页面
 // 函数在你需要的请求响应后面添加函数名调用
 let checkCodeMassage = (req, res, next) => {
