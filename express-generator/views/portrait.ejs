@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h2>文件上传</h2>
+    <hr>
+    <!-- enctype="multipart/form-data"是文件上传的必须属性，表示多部分上传文件内容 /portrait是提交请求的网址-->
+    <form action="/portrait" method="post" enctype="multipart/form-data">
+        <p>用户名：</p> <input type="text" name="username"><br>
+        <p>头像：</p> <input type="file" name="portrait"><br>
+        <input type="submit" value="提交">
+    </form>
+
+</body>
+
+</html>
