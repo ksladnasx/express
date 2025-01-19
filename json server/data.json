@@ -1,0 +1,60 @@
+{
+  "songs": [
+    {
+      "id": "1",
+      "title": "你的形状",
+      "artist": "Ed Sheeran",
+      "album": "÷ (Deluxe)",
+      "releaseYear": 2017
+    },
+    {
+      "id": "2",
+      "title": "Blinding Lights",
+      "artist": "The Weeknd",
+      "album": "After Hours",
+      "releaseYear": 2020
+    },
+    {
+      "id": "3",
+      "title": "Bad Guy",
+      "artist": "Billie Eilish",
+      "album": "Happier Than Ever",
+      "releaseYear": 2019
+    },
+    {
+      "id": "4",
+      "title": "Dance Monkey",
+      "artist": "Tones and I",
+      "album": "The Kids Are Coming",
+      "releaseYear": 2019
+    },
+    {
+      "id": "5",
+      "title": "Watermelon Sugar",
+      "artist": "Harry Styles",
+      "album": "Fine Line",
+      "releaseYear": 2019
+    },
+    {
+      "id": "4c17",
+      "title": "新增数据",
+      "artist": "id会自动添加",
+      "album": "返回值为id",
+      "releaseYear": 2022
+    },
+    {
+      "id": "71e7",
+      "title": "数据1",
+      "artist": "id会自动添加",
+      "album": "返回值为id",
+      "releaseYear": 2022
+    },
+    {
+      "id": "d88c",
+      "title": "数据1",
+      "artist": "id会自动添加",
+      "album": "返回值为id",
+      "releaseYear": 2022
+    }
+  ]
+}
