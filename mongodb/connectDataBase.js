@@ -1,18 +1,18 @@
 //导入要用的mongoose
 const mongoose = require('mongoose');
 //导入db文件
-const db = require('./db/db');
+const db = require('./express-generator/db/db');
 //导入模型
-const Person = require('./models/peoplemodel');
+const Person = require('./express-generator/models/peoplemodel');
 
-
+    
 //调用函数
 db(
     //对应db文件里面的success函数
 ()=>{
   
 
-    // ��入一個新的 document
+    //document
     const person = new Person({
         name: '王21',
         sex: "male",

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.css"
+      rel="stylesheet"
+    />
+    <style>
+      label {
+        font-weight: normal;
+      }
+      .panel-body .glyphicon-remove{
+        display: none;
+      }
+      .panel-body:hover .glyphicon-remove{
+        display: inline-block
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12 col-lg-8 col-lg-offset-2">
+          <h2>记账本</h2>
+          <hr />
+          <div class="accounts">
+            <!-- 根据传的参数利用ejds语法来做列表渲染 -->
+             <% accounts.forEach(item =>{%>
+            <div class="panel <%=item.type===-1 ? "panel-danger":"panel-success" %>">
+              <div class="panel-heading"><%=moment(item.time).format('YYYY-MM-DD') %></div>
+              <div class="panel-body">
+                <div class="col-xs-6"><%=item.title %></div> 
+                <div class="col-xs-2 text-center">
+                  <span class= "label <%=item.type===-1 ? "label-warning":"label-success" %>"><%=item.type===-1 ?"支出":"收入" %> </span>
+                </div>
+                <div class="col-xs-2 text-right"><%=item.account %> 元</div>
+                <div class="col-xs-2 text-right">
+                  <a class="delBtn" href="/account/<%=item.id %>">
+                  <span
+                    class="glyphicon glyphicon-remove"
+                    aria-hidden="true"
+                  ></span>
+                </a>
+                </div>
+              </div>
+            </div>
+            <% }) %> 
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <h2 class="col-xs-6 text-left   "><a href="/create" class="btn btn-primary">添加账单</a></h2>
+    
+  </body>
+   <script>
+    // 获取所有的删除按钮
+    const delBtns = document.querySelectorAll('.delBtn');
+    // 给每一个删除按钮添加点击事件
+    delBtns.forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        // 确认是否要删除
+        if (confirm('确定要删除吗？')) {
+          // 如果确认，跳转到删除的 URL
+          return true
+        }else{
+          // 阻止默认的跳转行为
+          e.preventDefault();
+        }
+      });
+    });
+   </script>
+</html>
